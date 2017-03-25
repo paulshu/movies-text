@@ -23,6 +23,7 @@ class GroupsController < ApplicationController
     @group.user = current_user
 
     if @group.save
+      current_user.join!(@group)
       redirect_to groups_path
     else
       render :new
@@ -51,6 +52,7 @@ class GroupsController < ApplicationController
     @group = Group.find(params[:id])
 
     if !current_user.is_member_of?(@group)
+      current_user.join!(@group)
       flash[:notice] = "加入本讨论版成功！"
     else
       flash[:warning] = "你已经是本讨论版成员了！"
