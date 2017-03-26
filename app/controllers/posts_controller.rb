@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
 
   before_action :authenticate_user!, :only => [:new, :create]
-
+  before_action :find_posts, only: [:edit, :update, :destroy]
   def new
     @group = Group.find(params[:group_id])
     @post = Post.new
@@ -21,23 +21,24 @@ class PostsController < ApplicationController
   end
 
   def edit
-    @group = Group.find(params[:group_id])
-    @post = Post.find(params[:id])
 
   end
 
   def update
-    @group = Group.find(params[:group_id])
-    @post = Post.find(params[:id])
-    @post.group = @group
-    if current_user != @group.user
-      redirect_to account_posts_path(@group)
-    end
+
     if @post.update(post_params)
       redirect_to account_posts_path, notice: "Update Success"
     else
       render :edit
     end
+  end
+
+  def destroy
+
+    @post.destroy
+    flash[:alert] = "文章已删除"
+
+    redirect_to account_posts_path
   end
 
 
@@ -46,5 +47,10 @@ class PostsController < ApplicationController
   def post_params
     params.require(:post).permit(:content)
   end
-
+  def find_posts
+    @group = Group.find(params[:group_id])
+    @post = Post.find(params[:id])
+    @post.group = @group
+    @post.user = current_user
+  end
 end
