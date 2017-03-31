@@ -5,22 +5,24 @@
   <table class="table">
     <thead>
       <tr>
-        <th> # </th>
-        <th> Title </th>
-        <th> Description </th>
-        <th> Post Count </th>
-        <th> Last Update </th>
+
+        <th> 电影名称 </th>
+        <th> 电影描述 </th>
+        <th> 评论数量 </th>
+        <th> 最后更新日期 </th>
+
       </tr>
     </thead>
 
     <tbody>
       <% @groups.each do |group| %>
         <tr>
-          <td> # </td>
+
           <td> <%= link_to(group.title, group_path(group)) %> </td>
           <td> <%= render_group_description(group) %> </td>
           <td> <%= group.posts.count %> </td>
           <td> <%= group.updated_at %> </td>
+
         </tr>
       <% end %>
     </tbody>

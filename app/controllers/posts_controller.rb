@@ -1,10 +1,16 @@
 class PostsController < ApplicationController
 
-  before_action :authenticate_user!, :only => [:new, :create]
+  before_action :authenticate_user!, only: [:new, :create]
   before_action :find_posts, only: [:edit, :update, :destroy]
   def new
     @group = Group.find(params[:group_id])
-    @post = Post.new
+
+    if current_user.is_member_of?(@group)
+      @post = Post.new
+    else
+      redirect_to :back
+      flash[:warning] = "请先收藏电影"
+    end
   end
 
   def create
